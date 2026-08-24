@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: meu_mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: meu_banco
+    ports:
+      - "3307:3306"
+    volumes:
+      - dados_mysql:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: meu_phpmyadmin
+    restart: always
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+
+  mongodb:
+    image: mongo:latest
+    container_name: meu_mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - dados_mongo:/data/db
+
+volumes:
+  dados_mysql:
+  dados_mongo:
