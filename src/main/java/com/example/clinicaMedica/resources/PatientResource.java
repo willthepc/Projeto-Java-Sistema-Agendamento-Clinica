@@ -3,6 +3,7 @@ package com.example.clinicaMedica.resources;
 import com.example.clinicaMedica.dto.PatientDto;
 import com.example.clinicaMedica.entities.Patient;
 import com.example.clinicaMedica.services.PatientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class PatientResource {
     }
 
     @PostMapping
-    public ResponseEntity<Patient> create(@RequestBody PatientDto patientDto) {
+    public ResponseEntity<Patient> create(@Valid @RequestBody PatientDto patientDto) {
         Patient patient = service.create(patientDto);
 
         URI uri = ServletUriComponentsBuilder

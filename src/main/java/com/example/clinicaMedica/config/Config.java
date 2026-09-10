@@ -57,5 +57,8 @@ public class Config implements CommandLineRunner {
         Patient p2 = new Patient(null, repositoryUser.getReferenceById(u1.getId()), LocalDate.parse("2001-02-09"), "11988888888");
         repositoryPatients.saveAll(Arrays.asList(p1, p2));
 
+
+
+
     }
 }

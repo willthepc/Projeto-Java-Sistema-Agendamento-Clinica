@@ -6,9 +6,11 @@ import com.example.clinicaMedica.entities.User;
 import com.example.clinicaMedica.enums.Role;
 import com.example.clinicaMedica.repository.PatientRepository;
 import com.example.clinicaMedica.repository.UserRepository;
+import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -30,20 +32,25 @@ public class PatientService {
     }
 
     public Patient create(PatientDto patientDto) {
-        User user = userRepository.findById(patientDto.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("Not found"));
+        try {
+            User user = userRepository.findById(patientDto.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Not found"));
 
-        if (user.getRole() != Role.PATIENT) {
-            throw new RuntimeException("Role wrong!");
+            if (user.getRole() != Role.PATIENT) {
+                throw new RuntimeException("Role wrong!");
+            }
+
+            Patient patient = Patient.builder()
+                    .user(user)
+                    .birthDate(patientDto.getBirthDate())
+                    .phone(patientDto.getPhone())
+                    .build();
+
+            return repository.save(patient);
         }
-
-        Patient patient = Patient.builder()
-                .user(user)
-                .birthDate(patientDto.getBirthDate())
-                .phone(patientDto.getPhone())
-                .build();
-
-        return repository.save(patient);
+         catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new SQLIntegrityConstraintViolationException("User já setado");
+        }
     }
 
     public Patient update(Long id, PatientDto patientDto) {

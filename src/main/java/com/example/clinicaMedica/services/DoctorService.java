@@ -6,10 +6,13 @@ import com.example.clinicaMedica.entities.User;
 import com.example.clinicaMedica.enums.Role;
 import com.example.clinicaMedica.repository.DoctorRepository;
 import com.example.clinicaMedica.repository.UserRepository;
+import com.example.clinicaMedica.services.exception.ObjectNotFoundException;
+import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.TreeSet;
 
 @Service
 public class DoctorService {
@@ -24,25 +27,30 @@ public class DoctorService {
     }
 
     public Doctor findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Not found"));
+        return repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Doctor not found!"));
     }
 
     public Doctor create(DoctorDto doctorDto) {
-        User user = userRepository.findById(doctorDto.getUser().getId())
-                .orElseThrow(() -> new RuntimeException("Not found"));
+        try {
+            User user = userRepository.findById(doctorDto.getUser().getId())
+                    .orElseThrow(() -> new ObjectNotFoundException("User not found!"));
 
-        if (user.getRole() != Role.DOCTOR) {
-            throw new RuntimeException("Role wrong!");
+            if (user.getRole() != Role.DOCTOR) {
+                throw new ObjectNotFoundException("User with other role!");
+            }
+
+            Doctor newDoctor = Doctor.builder()
+                    .user(doctorDto.getUser())
+                    .crm(doctorDto.getCrm())
+                    .specialty(doctorDto.getSpecialty())
+                    .durationEachConsult(doctorDto.getDurationEachConsult())
+                    .build();
+
+            return repository.save(newDoctor);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new SQLIntegrityConstraintViolationException("User já setado");
         }
 
-        Doctor newDoctor = Doctor.builder()
-                .user(doctorDto.getUser())
-                .crm(doctorDto.getCrm())
-                .specialty(doctorDto.getSpecialty())
-                .durationEachConsult(doctorDto.getDurationEachConsult())
-                .build();
-
-        return repository.save(newDoctor);
     }
 
     public Doctor update(Long id, DoctorDto doctorDto) {

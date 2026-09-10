@@ -4,6 +4,8 @@ import com.example.clinicaMedica.dto.UserDto;
 import com.example.clinicaMedica.enums.Role;
 import com.example.clinicaMedica.entities.User;
 import com.example.clinicaMedica.repository.UserRepository;
+import com.example.clinicaMedica.services.exception.PermissionDenied;
+import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,13 +25,19 @@ public class UserService {
     }
 
     public User create(UserDto userDto) {
+        Role newRole;
+        if (userDto.getRole() != Role.ADMIN) {
+            newRole = userDto.getRole();
+        } else {
+            throw new PermissionDenied("Permission Denied!");
+        }
         User user = User.builder()
                 .name(userDto.getName())
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
-                .role(Role.PATIENT)
+                .role(newRole)
                 .build();
-        return repository.save(user);
+            return repository.save(user);
     }
 
     public User update(Long id, UserDto newUserDto) {
