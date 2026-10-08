@@ -3,7 +3,6 @@ package com.example.clinicaMedica.resources;
 import com.example.clinicaMedica.dto.UserDto;
 import com.example.clinicaMedica.entities.User;
 import com.example.clinicaMedica.services.UserService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

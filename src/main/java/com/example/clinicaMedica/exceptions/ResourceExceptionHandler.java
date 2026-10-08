@@ -1,5 +1,6 @@
 package com.example.clinicaMedica.exceptions;
 
+import com.example.clinicaMedica.services.exception.HourException;
 import com.example.clinicaMedica.services.exception.ObjectNotFoundException;
 import com.example.clinicaMedica.services.exception.PermissionDenied;
 import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolationException;
@@ -29,6 +30,13 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(SQLIntegrityConstraintViolationException.class)
     public ResponseEntity<StandardError> sqlIntegrityConstraintViolationException(SQLIntegrityConstraintViolationException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Conflito", e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
+
+    @ExceptionHandler(HourException.class)
+    public ResponseEntity<StandardError> hourException (HourException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.CONFLICT;
         StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Conflito", e.getMessage(), request.getRequestURI());
         return ResponseEntity.status(status).body(err);

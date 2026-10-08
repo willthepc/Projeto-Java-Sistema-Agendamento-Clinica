@@ -4,7 +4,7 @@ import com.example.clinicaMedica.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class Appointment {
     @ManyToOne
     private Patient patient;
 
-    private LocalTime dateTime;
+    private LocalDateTime dateTime;
 
     private Integer durationMinutes;
 

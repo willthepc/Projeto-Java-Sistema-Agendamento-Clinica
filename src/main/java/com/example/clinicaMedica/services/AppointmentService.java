@@ -8,7 +8,7 @@ import com.example.clinicaMedica.enums.Status;
 import com.example.clinicaMedica.repository.AppointmentRepository;
 import com.example.clinicaMedica.repository.DoctorRepository;
 import com.example.clinicaMedica.repository.PatientRepository;
-import com.example.clinicaMedica.resources.PatientResource;
+import com.example.clinicaMedica.services.exception.HourException;
 import com.example.clinicaMedica.services.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,12 +42,12 @@ public class AppointmentService {
                 .orElseThrow(() -> new ObjectNotFoundException("Patient not Found!"));
 
         for (LocalTime horarioDesejado : localTime) {
-            if (horarioDesejado.equals(appointmentDto.getDateTime())) {
+            if (horarioDesejado.equals(appointmentDto.getDateTime().toLocalTime())) {
                 Appointment appointment = Appointment.builder()
                         .doctor(doctor)
                         .patient(patient)
                         .dateTime(appointmentDto.getDateTime())
-                        .durationMinutes(appointmentDto.getDoctor().getDurationEachConsult())
+                        .durationMinutes(doctor.getDurationEachConsult())
                         .status(Status.SCHEDULED)
                         .build();
 
@@ -55,6 +55,20 @@ public class AppointmentService {
             }
         }
 
-        throw new RuntimeException("Horário não disponível.");
+        throw new HourException("Horário não disponível.");
+    }
+
+    public Appointment updateStatusCancel(Long id) {
+        Appointment appointment = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
+        if (LocalDate.now().equals(appointment.getDateTime().toLocalDate())) {
+            throw new HourException("Não é possível realizar o cancelamento!");
+        }
+        appointment.setStatus(Status.CANCELED);
+        return repository.save(appointment);
+    }
+
+    public Status statusAtual(Long id) {
+        Appointment appointment = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
+        return appointment.getStatus();
     }
 }

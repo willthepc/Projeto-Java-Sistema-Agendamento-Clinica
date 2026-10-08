@@ -3,6 +3,8 @@ package com.example.clinicaMedica.services;
 import com.example.clinicaMedica.dto.AvailabilityDto;
 import com.example.clinicaMedica.entities.Availability;
 import com.example.clinicaMedica.entities.Doctor;
+import com.example.clinicaMedica.enums.Status;
+import com.example.clinicaMedica.repository.AppointmentRepository;
 import com.example.clinicaMedica.repository.AvailabilityRepository;
 import com.example.clinicaMedica.repository.DoctorRepository;
 import com.example.clinicaMedica.services.exception.ObjectNotFoundException;
@@ -24,14 +26,8 @@ public class AvailabilityService {
     @Autowired
     public DoctorRepository doctorRepository;
 
-    public List<Availability> findAll() {
-        return availabilityRepository.findAll();
-    }
-
-    public Availability findById(Long id) {
-        return availabilityRepository.findById(id)
-                .orElseThrow(() -> new ObjectNotFoundException("Not found"));
-    }
+    @Autowired
+    public AppointmentRepository appointmentRepository;
 
     public Availability create(Long doctorId, AvailabilityDto availabilityDto) {
         Doctor doctor = doctorRepository.findById(doctorId)
@@ -63,7 +59,7 @@ public class AvailabilityService {
     }
 
     public List<Availability> findDoctorById(Long id) {
-        return availabilityRepository.findByDoctorById(id);
+        return availabilityRepository.findByDoctorId(id);
     }
 
     public List<LocalTime> findAvailableSlots(Long doctorId, LocalDate date) {
@@ -73,7 +69,7 @@ public class AvailabilityService {
         DayOfWeek diaDaSemana = date.getDayOfWeek();
         Integer duracao = doctor.getDurationEachConsult();
 
-        List<Availability> janelas = availabilityRepository.findByDoctorById(doctorId);
+        List<Availability> janelas = availabilityRepository.findByDoctorId(doctorId);
         List<LocalTime> slots = new ArrayList<>();
 
         for (Availability janela : janelas) {
@@ -90,6 +86,16 @@ public class AvailabilityService {
 
             }
         }
+
+
+        List<LocalTime> horariosOcupados = appointmentRepository.findByDoctorId(doctorId).stream()
+                .filter(appointment -> !appointment.getStatus().equals(Status.CANCELED))
+                .filter(appointment -> appointment.getDateTime().toLocalDate().equals(date))
+                .map(appointment -> appointment.getDateTime().toLocalTime())
+                .toList();
+
+        slots.removeAll(horariosOcupados);
+
         return slots;
     }
 }

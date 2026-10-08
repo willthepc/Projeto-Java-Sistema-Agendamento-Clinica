@@ -1,18 +1,14 @@
 package com.example.clinicaMedica.resources;
 
 import com.example.clinicaMedica.dto.DoctorDto;
-import com.example.clinicaMedica.entities.Availability;
 import com.example.clinicaMedica.entities.Doctor;
 import com.example.clinicaMedica.services.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
-import java.util.TreeSet;
 
 @RestController
 @RequestMapping(value = "/doctors")

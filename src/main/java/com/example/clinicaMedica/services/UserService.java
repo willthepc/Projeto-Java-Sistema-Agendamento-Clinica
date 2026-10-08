@@ -5,7 +5,6 @@ import com.example.clinicaMedica.enums.Role;
 import com.example.clinicaMedica.entities.User;
 import com.example.clinicaMedica.repository.UserRepository;
 import com.example.clinicaMedica.services.exception.PermissionDenied;
-import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

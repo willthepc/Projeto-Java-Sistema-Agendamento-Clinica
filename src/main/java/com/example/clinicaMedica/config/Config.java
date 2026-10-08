@@ -1,21 +1,19 @@
 package com.example.clinicaMedica.config;
 
-import com.example.clinicaMedica.entities.Doctor;
-import com.example.clinicaMedica.entities.Patient;
-import com.example.clinicaMedica.entities.Specialty;
+import com.example.clinicaMedica.entities.*;
 import com.example.clinicaMedica.enums.Role;
-import com.example.clinicaMedica.entities.User;
-import com.example.clinicaMedica.repository.DoctorRepository;
-import com.example.clinicaMedica.repository.PatientRepository;
-import com.example.clinicaMedica.repository.SpecialtyRepository;
-import com.example.clinicaMedica.repository.UserRepository;
+import com.example.clinicaMedica.enums.Status;
+import com.example.clinicaMedica.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 
 import javax.print.Doc;
 import java.lang.reflect.Array;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Arrays;
 
 @Configuration
@@ -31,6 +29,12 @@ public class Config implements CommandLineRunner {
 
     @Autowired
     private PatientRepository repositoryPatients;
+
+    @Autowired
+    private AvailabilityRepository availabilityRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -58,7 +62,13 @@ public class Config implements CommandLineRunner {
         repositoryPatients.saveAll(Arrays.asList(p1, p2));
 
 
+        availabilityRepository.deleteAll();
+        Availability a1 = new Availability(null, repositoryDoctor.getReferenceById(d1.getId()), Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY, DayOfWeek.SATURDAY), LocalTime.parse("08:00"), LocalTime.parse("12:00"));
+        Availability a2 = new Availability(null, repositoryDoctor.getReferenceById(d2.getId()), Arrays.asList(DayOfWeek.FRIDAY, DayOfWeek.SATURDAY), LocalTime.parse("08:00"), LocalTime.parse("18:00"));
+        availabilityRepository.saveAll(Arrays.asList(a1, a2));
 
-
+        appointmentRepository.deleteAll();
+        Appointment ap1 = new Appointment(null, repositoryDoctor.getReferenceById(d1.getId()), repositoryPatients.getReferenceById(p1.getId()), LocalDateTime.parse("2026-10-03T09:00:00"), d1.getDurationEachConsult(), Status.SCHEDULED);
+        appointmentRepository.saveAll(Arrays.asList(ap1));
     }
 }

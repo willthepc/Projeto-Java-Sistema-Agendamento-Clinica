@@ -10,7 +10,6 @@ import com.example.clinicaMedica.services.exception.SQLIntegrityConstraintViolat
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -20,8 +19,6 @@ public class PatientService {
 
     @Autowired
     public UserRepository userRepository;
-
-    private Long idUser;
 
     public List<Patient> findAll() {
         return repository.findAll();

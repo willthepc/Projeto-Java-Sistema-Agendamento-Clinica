@@ -3,7 +3,6 @@ package com.example.clinicaMedica.services;
 import com.example.clinicaMedica.dto.SpecialtyDto;
 import com.example.clinicaMedica.entities.Specialty;
 import com.example.clinicaMedica.repository.SpecialtyRepository;
-import org.springframework.beans.factory.BeanRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
