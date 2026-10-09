@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/v1/users")
 public class UserResource {
     @Autowired
     private UserService service;
@@ -29,18 +29,18 @@ public class UserResource {
         return ResponseEntity.ok().body(user);
     }
 
-    @PostMapping
-    public ResponseEntity<User> create(@RequestBody UserDto userDto) {
-        User user = service.create(userDto);
-
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(user.getId())
-                .toUri();
-
-        return ResponseEntity.created(uri).body(user);
-    }
+//    @PostMapping
+//    public ResponseEntity<User> create(@RequestBody UserDto userDto) {
+//        User user = service.create(userDto);
+//
+//        URI uri = ServletUriComponentsBuilder
+//                .fromCurrentRequest()
+//                .path("/{id}")
+//                .buildAndExpand(user.getId())
+//                .toUri();
+//
+//        return ResponseEntity.created(uri).body(user);
+//    }
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<User> update(@PathVariable Long id, @RequestBody UserDto userDto) {

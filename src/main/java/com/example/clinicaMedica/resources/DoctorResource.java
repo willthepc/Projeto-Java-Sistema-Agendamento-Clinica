@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/doctors")
+@RequestMapping(value = "/v1/doctors")
 public class DoctorResource {
     @Autowired
     private DoctorService service;

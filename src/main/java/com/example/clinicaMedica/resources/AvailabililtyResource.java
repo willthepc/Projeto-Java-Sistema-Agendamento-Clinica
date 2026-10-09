@@ -16,7 +16,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 @RestController
-@RequestMapping("/doctors/{doctorId}/availability")
+@RequestMapping("/v1/doctors/{doctorId}/availability")
 @Validated
 public class AvailabililtyResource {
 

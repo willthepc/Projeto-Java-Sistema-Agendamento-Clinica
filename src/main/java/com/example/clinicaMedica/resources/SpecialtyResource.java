@@ -12,7 +12,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/specialties")
+@RequestMapping(value = "/v1/specialties")
 public class SpecialtyResource {
     @Autowired
     private SpecialtyService service;
