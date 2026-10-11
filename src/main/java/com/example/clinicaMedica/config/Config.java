@@ -39,10 +39,11 @@ public class Config implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         repositoryUser.deleteAll();
-        User u1 = new User(null, "William Nascimento", "william.nascimento@gmail.com", "nascimento123", Role.PATIENT);
-        User u2 = new User(null, "Dr. Carlos Mendes",  "carlos.mendes@clinica.com",  "123456", Role.DOCTOR);
-        User u3 = new User(null, "Dra. Fernanda Lima", "fernanda.lima@clinica", "09876", Role.DOCTOR);
-        User u4 = new User(null, "Juliana Alves", "juliana.alves@gmail.com", "juliana.alves@gmail.com", Role.PATIENT);
+        User u1 = new User(null, "William Nascimento", "william.nascimento@gmail.com", "nascimento123", Role.ROLE_PATIENT);
+        User u2 = new User(null, "Dr. Carlos Mendes",  "carlos.mendes@clinica.com",  "123456", Role.ROLE_DOCTOR);
+        User u3 = new User(null, "Dra. Fernanda Lima", "fernanda.lima@clinica", "09876", Role.ROLE_DOCTOR);
+        User u4 = new User(null, "Juliana Alves", "juliana.alves@gmail.com", "juliana.alves@gmail.com", Role.ROLE_PATIENT);
+        User u100 = new User(null, "admin", "admin@gmail.com", "admin", Role.ROLE_ADMIN);
         repositoryUser.saveAll(Arrays.asList(u1, u2, u3, u4));
 
         repositorySpecialty.deleteAll();

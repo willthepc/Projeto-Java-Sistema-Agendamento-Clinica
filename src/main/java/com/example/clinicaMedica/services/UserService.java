@@ -25,7 +25,7 @@ public class UserService {
 
     public User create(UserDto userDto) {
         Role newRole;
-        if (userDto.getRole() != Role.ADMIN) {
+        if (userDto.getRole() != Role.ROLE_ADMIN) {
             newRole = userDto.getRole();
         } else {
             throw new PermissionDenied("Permission Denied!");
@@ -45,12 +45,12 @@ public class UserService {
         user.setEmail(newUserDto.getEmail());
         user.setPassword(newUserDto.getPassword());
         Role role = newUserDto.getRole();
-        if (role == Role.ADMIN) {
-            user.setRole(Role.ADMIN);
-        } else if (role == Role.PATIENT) {
-            user.setRole(Role.PATIENT);
+        if (role == Role.ROLE_ADMIN) {
+            user.setRole(Role.ROLE_ADMIN);
+        } else if (role == Role.ROLE_PATIENT) {
+            user.setRole(Role.ROLE_PATIENT);
         } else {
-            user.setRole(Role.DOCTOR);
+            user.setRole(Role.ROLE_DOCTOR);
         }
         return repository.save(user);
     }

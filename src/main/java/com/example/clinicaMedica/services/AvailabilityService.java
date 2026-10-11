@@ -29,6 +29,10 @@ public class AvailabilityService {
     @Autowired
     public AppointmentRepository appointmentRepository;
 
+    public List<Availability> findDoctorById(Long id) {
+        return availabilityRepository.findByDoctorId(id);
+    }
+
     public Availability create(Long doctorId, AvailabilityDto availabilityDto) {
         Doctor doctor = doctorRepository.findById(doctorId)
                 .orElseThrow(() -> new ObjectNotFoundException("Doctor Not found"));
@@ -58,9 +62,6 @@ public class AvailabilityService {
         availabilityRepository.delete(availability);
     }
 
-    public List<Availability> findDoctorById(Long id) {
-        return availabilityRepository.findByDoctorId(id);
-    }
 
     public List<LocalTime> findAvailableSlots(Long doctorId, LocalDate date) {
         Doctor doctor = doctorRepository.findById(doctorId)

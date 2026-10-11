@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/v1/appointment")
@@ -16,6 +17,12 @@ public class AppointmentResource {
 
     @Autowired
     public AppointmentService service;
+
+    @GetMapping
+    public ResponseEntity<List<Appointment>> findAll() {
+        List<Appointment> findAll = service.findAll();
+        return ResponseEntity.ok().body(findAll);
+    }
 
     @PostMapping
     public ResponseEntity<Appointment> create(@RequestBody AppointmentDto appointmentDto) {

@@ -37,8 +37,8 @@ public class SecutiryConfiguration {
                                     response.setStatus(HttpStatus.FORBIDDEN.value());
                         }))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/v1/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/v1/avaliacoes/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/v1/users/**").hasRole("ADMIN")
+                        .requestMatchers("/v1/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticatorFilter, UsernamePasswordAuthenticationFilter.class)

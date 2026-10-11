@@ -34,7 +34,7 @@ public class DoctorService {
             User user = userRepository.findById(doctorDto.getUser().getId())
                     .orElseThrow(() -> new ObjectNotFoundException("User not found!"));
 
-            if (user.getRole() != Role.DOCTOR) {
+            if (user.getRole() != Role.ROLE_DOCTOR) {
                 throw new ObjectNotFoundException("User with other role!");
             }
 

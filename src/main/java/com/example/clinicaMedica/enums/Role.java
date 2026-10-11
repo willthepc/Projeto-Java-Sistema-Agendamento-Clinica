@@ -1,7 +1,7 @@
 package com.example.clinicaMedica.enums;
 
 public enum Role {
-    PATIENT,
-    DOCTOR,
-    ADMIN
+    ROLE_PATIENT,
+    ROLE_DOCTOR,
+    ROLE_ADMIN
 }

@@ -21,7 +21,7 @@ import java.util.List;
 public class AppointmentService {
 
     @Autowired
-    public AppointmentRepository repository;
+    public AppointmentRepository appointmentRepository;
 
     @Autowired
     private AvailabilityService availabilityService;
@@ -31,6 +31,10 @@ public class AppointmentService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    public List<Appointment> findAll() {
+        return appointmentRepository.findAll();
+    }
 
     public Appointment create(AppointmentDto appointmentDto, LocalDate date) {
         List<LocalTime> localTime = availabilityService.findAvailableSlots(appointmentDto.getDoctor().getId(), date);
@@ -51,7 +55,7 @@ public class AppointmentService {
                         .status(Status.SCHEDULED)
                         .build();
 
-                return repository.save(appointment);
+                return appointmentRepository.save(appointment);
             }
         }
 
@@ -59,16 +63,16 @@ public class AppointmentService {
     }
 
     public Appointment updateStatusCancel(Long id) {
-        Appointment appointment = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
         if (LocalDate.now().equals(appointment.getDateTime().toLocalDate())) {
             throw new HourException("Não é possível realizar o cancelamento!");
         }
         appointment.setStatus(Status.CANCELED);
-        return repository.save(appointment);
+        return appointmentRepository.save(appointment);
     }
 
     public Status statusAtual(Long id) {
-        Appointment appointment = repository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
+        Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Consulta não encontrada!"));
         return appointment.getStatus();
     }
 }

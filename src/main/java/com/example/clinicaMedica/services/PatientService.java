@@ -33,7 +33,7 @@ public class PatientService {
             User user = userRepository.findById(patientDto.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("Not found"));
 
-            if (user.getRole() != Role.PATIENT) {
+            if (user.getRole() != Role.ROLE_PATIENT) {
                 throw new RuntimeException("Role wrong!");
             }
 
